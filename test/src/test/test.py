@@ -9,6 +9,7 @@ Created on 08/02/2018
 from os.path import join, dirname, abspath
 import xlrd
 import xml.etree.ElementTree as ET
+from collections import defaultdict
 
 xml_bushings = []
 exl_bushings = []
@@ -36,7 +37,8 @@ for child in root.iter("NVHC_PROPERTY"):
         xml_bushings.insert(0, child2.text)
 print(xml_bushings)
 
-
+cont = 0
+bushings_dict = {}
 num_cols = x1_sheet.ncols  # Number of columns
 for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
     for col_idx in range(0, num_cols):  # Iterate through columns
@@ -54,10 +56,24 @@ for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
                                 for row_idx in range(col_idx+1, 6):  # Iterate through columns
                                     cell_obj3 = x1_sheet.cell(a, col_idx2).value
                                     print(cell_obj3,cell_obj2, xml_bushings[i], a + 1)
-                                    exl_bushings.insert(0, str(i) + "_" + str(cell_obj3))
-                                    break                
-                    
-print(exl_bushings)
+                                    exl_bushings.insert(0, cell_obj3)
+                                    cont = cont + 1
+                                    if cont == 6:
+                                        cont = 0
+                                        bushings_dict[str(cell_obj2)] = exl_bushings
+                                        exl_bushings = [] 
+                                        break
+                                    break
+                                    #bushings_dict[str(cell_obj2)] = cell_obj3
+                                    #bushings_dict[str(cell_obj2)].
+print(bushings_dict)
+"""print(exl_bushings)
+d = {}
+for i in range(5):
+    d[i] = 'o'
+
+print(d)"""
+ 
 
 
                                     
