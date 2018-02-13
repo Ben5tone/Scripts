@@ -9,7 +9,6 @@ Created on 08/02/2018
 from os.path import join, dirname, abspath
 import xlrd
 import xml.etree.ElementTree as ET
-from collections import defaultdict
 
 xml_bushings = []
 exl_bushings = []
@@ -55,7 +54,7 @@ for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
                             for col_idx2 in range(col_idx+1, 10):    # Iterate through rows
                                 for row_idx in range(col_idx+1, 6):  # Iterate through columns
                                     cell_obj3 = x1_sheet.cell(a, col_idx2).value
-                                    print(cell_obj3,cell_obj2, xml_bushings[i], a + 1)
+                                    #print(cell_obj3,cell_obj2, xml_bushings[i], a + 1)
                                     exl_bushings.insert(0, cell_obj3)
                                     cont = cont + 1
                                     if cont == 6:
@@ -64,9 +63,28 @@ for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
                                         exl_bushings = [] 
                                         break
                                     break
-                                    #bushings_dict[str(cell_obj2)] = cell_obj3
-                                    #bushings_dict[str(cell_obj2)].
+
 print(bushings_dict)
+
+parameters_list = []
+for child3 in root.iter("NVHC_PROPERTY"):
+    for child4 in child3.iter("NAME"):
+        for key,value in bushings_dict.items():
+            if child4.text == key:
+                #print(value)
+                for child4 in child3.iter("PARAMETERS"):
+                    print(child4.tag)
+                    #for child5 in child4.iter("B_VALUES"):
+                        #print(child5.tag)
+            #if key == child4.text  
+        #if child4.text == bushings_dict 
+        
+""" for child4 in child.iter("PARAMETERS"):
+    for child5 in child4.iter("B_VALUES"):
+    parameters_list.insert(0,child5.tag)"""
+        
+        
+print(parameters_list)
 """print(exl_bushings)
 d = {}
 for i in range(5):
