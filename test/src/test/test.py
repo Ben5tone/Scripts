@@ -18,6 +18,8 @@ fname = join(dirname(dirname(abspath(__file__))),'test_data', 'Extract_bushing_r
 #Assign Inline .xml file
 xname = join(dirname(dirname(abspath(__file__))),'test_data', 'INLINEC.xml')
 
+oname = join(dirname(dirname(abspath(__file__))),'test_data', 'output2.xml')
+
 #Open the workbook
 x1_workbook = xlrd.open_workbook(fname)
 
@@ -71,29 +73,26 @@ for child3 in root.iter("NVHC_PROPERTY"):
     for child4 in child3.iter("NAME"):
         for key,value in bushings_dict.items():
             if child4.text == key:
-                #print(value)
+                
+                print(key)
+                #Accesign to each element of the list that is inside the found key
+                r1 = bushings_dict[child4.text][0]
+                r2 = bushings_dict[child4.text][1] 
+                r3 = bushings_dict[child4.text][2] 
+                r4 = bushings_dict[child4.text][3] 
+                r5 = bushings_dict[child4.text][4] 
+                r6 = bushings_dict[child4.text][5]
+                  
                 for child4 in child3.iter("PARAMETERS"):
-                    print(child4.tag)
-                    #for child5 in child4.iter("B_VALUES"):
-                        #print(child5.tag)
-            #if key == child4.text  
-        #if child4.text == bushings_dict 
-        
-""" for child4 in child.iter("PARAMETERS"):
-    for child5 in child4.iter("B_VALUES"):
-    parameters_list.insert(0,child5.tag)"""
-        
-        
-print(parameters_list)
-"""print(exl_bushings)
-d = {}
-for i in range(5):
-    d[i] = 'o'
-
-print(d)"""
- 
-
-
-                                    
-                        
-    
+                    for child5 in child4:
+                        if child5.tag == "B_VALUES":
+                            
+                            child5.set("b1", str(r6))
+                            child5.set("b2", str(r5))
+                            child5.set("b3", str(r4))
+                            child5.set("b4", str(r3))
+                            child5.set("b5", str(r2))
+                            child5.set("b6", str(r1))
+                            
+                            tree.write(oname)  
+                            print(child5.attrib)
