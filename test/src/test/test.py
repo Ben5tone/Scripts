@@ -8,8 +8,6 @@ Created on 08/02/2018
 import xlrd
 from openpyxl import load_workbook
 import xml.etree.ElementTree as ET
-from openpyxl.reader.excel import KEEP_VBA
-
 
 
 def exl2xml():
@@ -30,7 +28,7 @@ def exl2xml():
     for child in root.iter("NVHC_PROPERTY"):
         for child2 in child.iter("NAME"):
             xml_bushings.insert(0, child2.text)
-    print(xml_bushings)
+    #print(xml_bushings)
 
     cont = 0
     bushings_dict = {}
@@ -60,7 +58,7 @@ def exl2xml():
                                     
                                         break
 
-    print(bushings_dict)
+    #print(bushings_dict)
 
     #Iterate trough all the NVHC PROPERTY tags contained in the file
     for child3 in root.iter("NVHC_PROPERTY"):
@@ -93,7 +91,7 @@ def exl2xml():
                                 child5.set("b6", str(0))
                                 #Write the new data to the same xml file or create a new with diferent name 
                                 tree.write('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\output2.xml')  
-                                print(child5.attrib)
+                                #print(child5.attrib)
                             
                             elif child5.tag == "K_VALUES":
                                 child5.set("k1", str(rt6))
@@ -104,14 +102,14 @@ def exl2xml():
                                 child5.set("k6", str(rt1))
                                 #Write the new data to the same xml file or create a new with diferent name  
                                 tree.write('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\output2.xml')  
-                                print(child5.attrib)
+                                #print(child5.attrib)
 
 def xml2exl():
     #Open the workbook to write in
     x1_workbook = xlrd.open_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsm')
     #Open the workbook to read in
     y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsm')
-    wb = y1_workbook.active
+    wb = y1_workbook['CM2']
     
     x1_sheet = x1_workbook.sheet_by_index(1)
     
@@ -122,34 +120,40 @@ def xml2exl():
     #Iterate over inline.xml file to obtain all the bushing names 
     for child in root.iter("NVHC_PROPERTY"):
         for child2 in child.iter("NAME"):
-            print(child2.text)
+            #print(child2.text)
             for child3 in child.iter("PARAMETERS"):
-                print(child3.tag)
+                #print(child3.tag)
                 for child4 in child3:
                     if child4.tag == "GE_VALUES":
                         xml_bushings[child2.text] = child4.attrib
                 #if child3.text == "GE_VALUES":
                     #print("a")
             #xml_bushings.insert(0, child2.text)
-    print(xml_bushings)
+    #print(xml_bushings)
     
     for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
         for col_idx in range(0, x1_sheet.ncols):  # Iterate through columns
             cell_obj = x1_sheet.cell(row_idx, col_idx).value  # Get cell object by row, col 
             if cell_obj == "Bushing":
-                    for row_idx in range(row_idx+1, x1_sheet.nrows): # Iterate through columns
-                        for key in xml_bushings.items():
-                            wb.cell(row = row_idx, column = col_idx).value = key
-        
-    
-    y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy3.xlsx')                       
-"""wb.cell(row = 1, column = 2).value = 10
+                for row_idx2 in range(row_idx, x1_sheet.nrows): # Iterate through columns
+                    for key, value in xml_bushings.items():
+                        row_idx2 = row_idx2+1
+                        #print(key)
+                        wb.cell(row = row_idx2, column = col_idx+1, value = key)
+                        #print(wb.cell(row = row_idx, column = col_idx).value)
+                        for col_idx2 in range(col_idx+2,x1_sheet.ncols):
+                            wb.cell(row = row_idx2, column = col_idx2, value = str(xml_bushings[k][num]))
+                            #y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')                       
+
+"""y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')
+wb = y1_workbook.active
+wb.cell(row = 1, column = 2).value = 10
 b = wb.cell(row = 1, column = 2).value
 wb['G12'] = 4
 a = wb['G12'].value
-print(b)"""
-    
-
+print(b)
+y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')    
+"""
 
 tree = ET.parse('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\INLINEC.xml')
 root = tree.getroot()
