@@ -8,6 +8,7 @@ Created on 08/02/2018
 import xlrd
 from openpyxl import load_workbook
 import xml.etree.ElementTree as ET
+import time
 
 
 def exl2xml():
@@ -138,13 +139,25 @@ def xml2exl():
                 for row_idx2 in range(row_idx, x1_sheet.nrows): # Iterate through columns
                     for key, value in xml_bushings.items():
                         row_idx2 = row_idx2+1
-                        #print(key)
-                        wb.cell(row = row_idx2, column = col_idx+1, value = key)
+                        #print(xml_bushings[a])
+                        v1 = xml_bushings[key]['ge1']
+                        v2 = xml_bushings[key]['ge2'] 
+                        v3 = xml_bushings[key]['ge3'] 
+                        v4 = xml_bushings[key]['ge4'] 
+                        v5 = xml_bushings[key]['ge5'] 
+                        v6 = xml_bushings[key]['ge6']
+                        wb.cell(row = row_idx2+1, column = col_idx+1, value = key)
                         #print(wb.cell(row = row_idx, column = col_idx).value)
-                        for col_idx2 in range(col_idx+2,x1_sheet.ncols):
-                            wb.cell(row = row_idx2, column = col_idx2, value = str(xml_bushings[k][num]))
-                            #y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')                       
-
+                        for col_idx2 in range(col_idx+2,x1_sheet.ncols-1):
+                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v1))
+                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v2))
+                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v3))
+                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v4))
+                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v5))
+                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
+    
+                            y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')                       
+    
 """y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')
 wb = y1_workbook.active
 wb.cell(row = 1, column = 2).value = 10
@@ -157,6 +170,8 @@ y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extra
 
 tree = ET.parse('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\INLINEC.xml')
 root = tree.getroot()
-
+start_time = time.time()
 xml2exl()
 #exl2xml()
+elapsed_time = start_time - time.time()
+print(elapsed_time)
