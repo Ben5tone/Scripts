@@ -110,7 +110,7 @@ def xml2exl():
     x1_workbook = xlrd.open_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsm')
     #Open the workbook to read in
     y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsm')
-    wb = y1_workbook['CM2']
+    wb = y1_workbook['CM3']
     
     x1_sheet = x1_workbook.sheet_by_index(1)
     
@@ -156,7 +156,7 @@ def xml2exl():
                             wb.cell(row = row_idx2+1, column = col_idx2, value = float(v5))
                             wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
     
-                            y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')                       
+                    y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')                       
     
 """y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')
 wb = y1_workbook.active
