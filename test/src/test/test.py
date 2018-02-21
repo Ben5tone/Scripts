@@ -110,13 +110,12 @@ def xml2exl():
     x1_workbook = xlrd.open_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsm')
     #Open the workbook to read in
     y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsm')
-    wb = y1_workbook['CM3']
+    wb = y1_workbook['CM4']
     
-    x1_sheet = x1_workbook.sheet_by_index(1)
+    x1_sheet = x1_workbook.sheet_by_index(4)
     
     #List variables to put the names of the bushing names contained in the xml and excel file
     xml_bushings = {}
-    exl_bushings = []
     
     #Iterate over inline.xml file to obtain all the bushing names 
     for child in root.iter("NVHC_PROPERTY"):
@@ -125,13 +124,12 @@ def xml2exl():
             for child3 in child.iter("PARAMETERS"):
                 #print(child3.tag)
                 for child4 in child3:
-                    if child4.tag == "GE_VALUES":
+                    if child4.tag == "K_VALUES":
                         xml_bushings[child2.text] = child4.attrib
                 #if child3.text == "GE_VALUES":
                     #print("a")
             #xml_bushings.insert(0, child2.text)
     #print(xml_bushings)
-    
     for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
         for col_idx in range(0, x1_sheet.ncols):  # Iterate through columns
             cell_obj = x1_sheet.cell(row_idx, col_idx).value  # Get cell object by row, col 
@@ -140,35 +138,32 @@ def xml2exl():
                     for key, value in xml_bushings.items():
                         row_idx2 = row_idx2+1
                         #print(xml_bushings[a])
-                        v1 = xml_bushings[key]['ge1']
-                        v2 = xml_bushings[key]['ge2'] 
-                        v3 = xml_bushings[key]['ge3'] 
-                        v4 = xml_bushings[key]['ge4'] 
-                        v5 = xml_bushings[key]['ge5'] 
-                        v6 = xml_bushings[key]['ge6']
+                        v1 = xml_bushings[key]['k1']
+                        v2 = xml_bushings[key]['k2'] 
+                        v3 = xml_bushings[key]['k3'] 
+                        v4 = xml_bushings[key]['k4'] 
+                        v5 = xml_bushings[key]['k5'] 
+                        v6 = xml_bushings[key]['k6']
                         wb.cell(row = row_idx2+1, column = col_idx+1, value = key)
                         #print(wb.cell(row = row_idx, column = col_idx).value)
                         for col_idx2 in range(col_idx+2,x1_sheet.ncols-1):
-                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v1))
-                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v2))
-                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v3))
-                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v4))
-                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v5))
-                            wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
+                            if(col_idx2 == 5):
+                                wb.cell(row = row_idx2+1, column = col_idx2, value = float(v1))
+                            if(col_idx2 == 6):
+                                wb.cell(row = row_idx2+1, column = col_idx2, value = float(v2))
+                            if(col_idx2 == 7):
+                                wb.cell(row = row_idx2+1, column = col_idx2, value = float(v3))
+                            if(col_idx2 == 8):
+                                wb.cell(row = row_idx2+1, column = col_idx2, value = float(v4))
+                            if(col_idx2 == 9):
+                                wb.cell(row = row_idx2+1, column = col_idx2, value = float(v5))
+                            if(col_idx2 == 10):
+                                wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
     
-                    y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')                       
+                    y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy2.xlsx')                       
     
-"""y1_workbook = load_workbook('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')
-wb = y1_workbook.active
-wb.cell(row = 1, column = 2).value = 10
-b = wb.cell(row = 1, column = 2).value
-wb['G12'] = 4
-a = wb['G12'].value
-print(b)
-y1_workbook.save('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\Extract_bushing_rates_tool - Copy.xlsx')    
-"""
 
-tree = ET.parse('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\INLINEC.xml')
+tree = ET.parse('C:\\Users\\JCHAV106\\git\\Scripts\\test\\src\\test_data\\inline_forjulio.xml')
 root = tree.getroot()
 start_time = time.time()
 xml2exl()
