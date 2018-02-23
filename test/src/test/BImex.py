@@ -73,7 +73,7 @@ class BImex(object):
             #Iterate trough all the NAME tags that are child of each NVHC PROPERTY tag
             for child4 in child3.iter("NAME"):
                 #Iterate trough items of the bushing_dict to obtain their keys and values
-                for key in bushings_dict.items():
+                for key, value in bushings_dict.items():
                     #Iterate to compare if the NAME obtained from the Bushing matches with one of the keys of the bushings_dict
                     if child4.text == key:
                         print(key)
