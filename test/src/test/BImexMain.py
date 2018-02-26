@@ -3,9 +3,8 @@ Created on 20/02/2018
 
 @author: JCHAV106
 '''
-from tkinter import Toplevel, Entry, Tk, ttk, filedialog
+from tkinter import Toplevel, Entry, Tk, ttk, filedialog, messagebox
 from BImex import BImex
-from IPython.lib.clipboard import tkinter_clipboard_get
 
 global b
 b = BImex()
@@ -15,7 +14,16 @@ global text3
 #global t
 #global t2
 
+def check():
+    if browser_xmlfo.state() == ('disabled',):
+        browser_xmlfo.config(state='enabled')
+        text3.config(state='enabled')
+    else: 
+        browser_xmlfo.config(state='disabled')
+    
+
 def run(t = None,t2 = None):
+    messagebox.askokcancel('File Output', 'If you continue, the original XML file will be overwrited. If you want to create a new file with the updated data, mark the checkbutton with the label: "XML File Ouput"./n ¿Do you want to overwrite the original XML File?')
     if t == None:
         t = text.get()
     if t2 == None:
@@ -90,12 +98,14 @@ def xml2exl_win():
     #browser.pack(side=RIGHT)
     browser_exl = ttk.Button(newin, text = "Browser", command = browserf2)
     browser_exl.grid(row=2,column=5)
+    global browser_xmlfo
     browser_xmlfo = ttk.Button(newin, text = "Browser", command = browserf3, state='disabled')
     browser_xmlfo.grid(row=3,column=5)
-    c = ttk.Checkbutton(newin, text = "XML Output File" )
+    c = ttk.Checkbutton(newin, text = "XML Output File", command = check)
     c.grid(row=3, column=3)
     Runn = ttk.Button(newin, text = "Run", command = run2)
     Runn.grid(row=5, column=5)
+    return browser_xmlfo
     
 root = Tk()
 root.title("BIm3x")
