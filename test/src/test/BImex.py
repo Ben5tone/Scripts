@@ -4,6 +4,7 @@ Created on 20/02/2018
 @author: JCHAV106
 '''
 import xlrd
+from tkinter import messagebox, Toplevel
 from openpyxl import load_workbook
 import xml.etree.ElementTree as ET
 
@@ -13,7 +14,7 @@ class BImex(object):
     def __init__(self,):
         ""
 
-    def exl2xml(self,xmlf,exlf,xmlfo):
+    def exl2xml(self,xmlf,exlf,xmlfo,s_num):
     
         tree = ET.parse(xmlf)
         root = tree.getroot()
@@ -27,7 +28,7 @@ class BImex(object):
         print('Sheet Names',sheet_names)
         
         #Call the first sheet of the book
-        x1_sheet = x1_workbook.sheet_by_index(0)
+        x1_sheet = x1_workbook.sheet_by_index(s_num)
     
         #List variables to put the names of the bushing names contained in the xml and excel file
         xml_bushings = []
@@ -112,7 +113,7 @@ class BImex(object):
                                     tree.write(xmlfo)  
                                     #print(child5.attrib)
     
-    def xml2exl(self,xmlf,exlf,exlfo):
+    def xml2exl(self,xmlf,exlf,exlfo,current_s,s_num):
         
         tree = ET.parse(xmlf)
         root = tree.getroot()
@@ -126,11 +127,11 @@ class BImex(object):
         print('Sheet Names',sheet_names)
         
         #Call the first sheet of the book
-        x1_sheet = x1_workbook.sheet_by_index(0)
+        x1_sheet = x1_workbook.sheet_by_index(s_num)
        
         #Open the workbook to read in
-        y1_workbook = load_workbook(xmlf)
-        wb = y1_workbook['CM3']
+        y1_workbook = load_workbook(exlf)
+        wb = y1_workbook[current_s]
     
         #List variables to put the names of the bushing names contained in the xml and excel file
         xml_bushings = {}
@@ -145,7 +146,7 @@ class BImex(object):
                         if child4.tag == "GE_VALUES":
                             xml_bushings[child2.text] = child4.attrib
                             
-        #print(xml_bushings)
+        print(xml_bushings)
     
         for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
             for col_idx in range(0, x1_sheet.ncols):  # Iterate through columns
@@ -154,7 +155,6 @@ class BImex(object):
                     for row_idx2 in range(row_idx, x1_sheet.nrows): # Iterate through columns
                         for key, value in xml_bushings.items():
                             row_idx2 = row_idx2+1
-                            #print(xml_bushings[a])
                             v1 = xml_bushings[key]['ge1']
                             v2 = xml_bushings[key]['ge2'] 
                             v3 = xml_bushings[key]['ge3'] 
@@ -162,7 +162,7 @@ class BImex(object):
                             v5 = xml_bushings[key]['ge5'] 
                             v6 = xml_bushings[key]['ge6']
                             wb.cell(row = row_idx2+1, column = col_idx+1, value = key)
-                            #print(wb.cell(row = row_idx, column = col_idx).value)
+                            print(wb.cell(row = row_idx2+1, column = col_idx+1).value)
                             for col_idx2 in range(col_idx+2,x1_sheet.ncols-1):
                                 if(col_idx2 == 5):
                                     wb.cell(row = row_idx2+1, column = col_idx2, value = float(v1))
@@ -178,3 +178,7 @@ class BImex(object):
                                     wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
     
                         y1_workbook.save(exlfo)
+                        break
+                    messagebox.showinfo("Process", "Done")
+                    
+                    break

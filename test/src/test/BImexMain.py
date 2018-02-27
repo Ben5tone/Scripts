@@ -41,20 +41,28 @@ def exl_check():
         texte3.config(state='disabled')
     
 
-def run(t = None,t2 = None):
+def run(t = None,t2 = None,listb = None, s_num = None):
     if messagebox.askokcancel(title = 'File Ouput', message = 'If you want to overwrite the original file with the updated data then press OK.\nOtherwise press CANCEL and select the XML Output File box to create a new file') == True:
         if t == None:
-            t = text.get()
+            t = texte.get()
         if t2 == None:
-            t2 = text2.get()
-        b.exl2xml(t, t2, t)
+            t2 = texte2.get()
+        if listb == None:
+            listb = lb.get(lb.curselection()[0])
+        if s_num == None:
+            s_num = int(lb.curselection()[0])
+    b.exl2xml(t, t2, t,listb,s_num)
     
-def run2(t = None,t2 = None):
+def run2(t = None,t2 = None,listb = None, s_num = None):
     if t == None:
-        t = text.get()
+        t = textx.get()
     if t2 == None:
-        t2 = text2.get()
-    b.exl2xml(t, t2, t)
+        t2 = textx2.get()
+    if listb == None:
+        listb = lb.get(lb.curselection()[0])
+    if s_num == None:
+        s_num = int(lb.curselection()[0])
+    b.xml2exl(t, t2, t2,listb,s_num)
 
 def browserfx1():
     file1 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("xml files","*.xml"),("all files","*.*")))
@@ -114,7 +122,7 @@ def exl2xml_win():
     global browser_exlfo
     browser_exlfo = ttk.Button(newin, text = "Browser", command = browserfe3, state='disabled')
     browser_exlfo.grid(row=3,column=5)
-    c = ttk.Checkbutton(newin, text = "Excel Output\n     File", command = exl_check)
+    c = ttk.Checkbutton(newin, text = "XML Output\n     File", command = exl_check)
     c.grid(row=3, column=3)
     Runn = ttk.Button(newin, text = "Run", command = run)
     Runn.grid(row = 5, column = 5)
@@ -150,7 +158,7 @@ def xml2exl_win():
     global browser_xmlfo
     browser_xmlfo = ttk.Button(newin, text = "Browser", command = browserfx3, state='disabled')
     browser_xmlfo.grid(row=3,column=5)
-    c = ttk.Checkbutton(newin, text = "XML Output File", command = xml_check)
+    c = ttk.Checkbutton(newin, text = "Excel Output File", command = xml_check)
     c.grid(row=3, column=3)
     Runn = ttk.Button(newin, text = "Run", command = run2)
     Runn.grid(row=5, column=5)
