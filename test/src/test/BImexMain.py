@@ -75,7 +75,7 @@ def browserfx2():
     #t2 = text2.get()
     
 def browserfx3():
-    file3 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("xml files","*.xml"),("all files","*.*")))
+    file3 = filedialog.asksaveasfilename(defaultextension='xlsx',filetypes=[("Excel Files","*.xlsx .xlsm")])
     textx3.insert(0, file3)
     #t2 = text2.get()
     
@@ -90,7 +90,7 @@ def browserfe2():
     #t2 = text2.get()
     
 def browserfe3():
-    file3 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("xml files","*.xml"),("all files","*.*")))
+    file3 = filedialog.asksaveasfilename(defaultextension='xml',filetypes=[("XML file","*.xml")])
     texte3.insert(0, file3)
     #t2 = text2.get()
     
@@ -135,6 +135,7 @@ def exl2xml_win():
     
 def xml2exl_win():
     newin = Toplevel(root)
+    newin.wm_geometry("380x330")
     display = ttk.Label(newin, text = "XML File")
     display.grid(row=1,column=3)
     display2 = ttk.Label(newin, text = "Excel File")
@@ -151,19 +152,19 @@ def xml2exl_win():
     textx2.grid(row=2,column=4)
     textx3.grid(row=3,column=4)
     browser_xml = ttk.Button(newin, text = "Browser", command = browserfx1)
-    browser_xml.grid(row=1,column=5)
+    browser_xml.place(x = 265, y = 0, height=25, width=113)
     #browser.pack(side=RIGHT)
     browser_exl = ttk.Button(newin, text = "Browser", command = browserfx2)
-    browser_exl.grid(row=2,column=5)
+    browser_exl.place(x = 265, y = 25, height=25, width=113)
     global browser_xmlfo
     browser_xmlfo = ttk.Button(newin, text = "Browser", command = browserfx3, state='disabled')
-    browser_xmlfo.grid(row=3,column=5)
-    c = ttk.Checkbutton(newin, text = "Excel Output File", command = xml_check)
+    browser_xmlfo.place(x = 265, y = 60, height=25, width = 113)
+    c = ttk.Checkbutton(newin, text = "   Excel\nOutput File", command = xml_check)
     c.grid(row=3, column=3)
     Runn = ttk.Button(newin, text = "Run", command = run2)
-    Runn.grid(row=5, column=5)
-    sheets_b = ttk.Button(newin, text = "Get Sheet Names", command = sheetsx)
-    sheets_b.grid(row = 6, column = 5)
+    Runn.place(x = 263, y = 280, width = 113)
+    sheets_b = ttk.Button(newin, text = "Existing Sheets", command = sheetsx, width = 13)
+    sheets_b.place(x = 263, y = 250)
     global lb
     lb = Listbox(newin)
     lb.grid(row = 5, column = 4)
