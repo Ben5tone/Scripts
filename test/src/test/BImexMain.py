@@ -4,7 +4,7 @@ Created on 20/02/2018
 @author: JCHAV106
 '''
 import xlrd
-from tkinter import Toplevel, Entry, Tk, ttk, filedialog, messagebox, Listbox
+from tkinter import Toplevel, Entry, Tk, ttk, filedialog, messagebox, Listbox, PhotoImage
 from BImex import BImex
 
 global b
@@ -20,6 +20,7 @@ def sheetse():
     lb.insert(0,*sheet_names)
     
 def sheetsx():
+    Runnx.config(state='enabled')
     x1_workbook = xlrd.open_workbook(textx2.get())
     sheet_names = x1_workbook.sheet_names()
     lb.insert(0,*sheet_names)
@@ -124,18 +125,18 @@ def exl2xml_win():
     browser_exlfo.grid(row=3,column=5)
     c = ttk.Checkbutton(newin, text = "XML Output\n     File", command = exl_check)
     c.grid(row=3, column=3)
-    Runn = ttk.Button(newin, text = "Run", command = run)
-    Runn.grid(row = 5, column = 5)
+    global Runne
+    Runne = ttk.Button(newin, text = "Run", command = run,state='disabled')
+    Runne.grid(row = 5, column = 5)
     sheets_b = ttk.Button(newin, text = "Get Sheet Names", command = sheetse)
-    sheets_b.grid(row = 6, column = 5)
+    sheets_b.grid(row = 5, column = 4)
     global lb
     lb = Listbox(newin)
-    lb.grid(row = 5, column = 4)
-    return browser_exlfo,lb , texte, texte2, texte3
+    lb.grid(row = 6, column = 4)
+    return browser_exlfo,lb , texte, texte2, texte3, Runne
     
 def xml2exl_win():
     newin = Toplevel(root)
-    newin.wm_geometry("380x330")
     display = ttk.Label(newin, text = "XML File")
     display.grid(row=1,column=3)
     display2 = ttk.Label(newin, text = "Excel File")
@@ -152,32 +153,34 @@ def xml2exl_win():
     textx2.grid(row=2,column=4)
     textx3.grid(row=3,column=4)
     browser_xml = ttk.Button(newin, text = "Browser", command = browserfx1)
-    browser_xml.place(x = 265, y = 0, height=25, width=113)
+    browser_xml.grid(row=1,column=5)
     #browser.pack(side=RIGHT)
     browser_exl = ttk.Button(newin, text = "Browser", command = browserfx2)
-    browser_exl.place(x = 265, y = 25, height=25, width=113)
+    browser_exl.grid(row=2,column=5)
     global browser_xmlfo
     browser_xmlfo = ttk.Button(newin, text = "Browser", command = browserfx3, state='disabled')
-    browser_xmlfo.place(x = 265, y = 60, height=25, width = 113)
+    browser_xmlfo.grid(row=3,column=5)
     c = ttk.Checkbutton(newin, text = "   Excel\nOutput File", command = xml_check)
     c.grid(row=3, column=3)
-    Runn = ttk.Button(newin, text = "Run", command = run2)
-    Runn.place(x = 263, y = 280, width = 113)
-    sheets_b = ttk.Button(newin, text = "Existing Sheets", command = sheetsx, width = 13)
-    sheets_b.place(x = 263, y = 250)
+    global Runnx
+    Runnx = ttk.Button(newin, text = "Run", command = run2, state='disabled')
+    Runnx.grid(row = 5, column = 5)
+    sheets_b = ttk.Button(newin, text = "Existing Sheets", command = sheetsx)
+    sheets_b.grid(row = 5, column =4)
     global lb
     lb = Listbox(newin)
-    lb.grid(row = 5, column = 4)
-    return browser_xmlfo,lb, textx, textx2, textx3
+    lb.grid(row = 6, column = 4)
+    return browser_xmlfo,lb, textx, textx2, textx3, Runnx
     
 root = Tk()
 root.title("BIm3x")
-label = ttk.Label(root, text="BIm3x")
-label.pack()
+logo = PhotoImage(file = "C:\\Users\\julio\\Downloads\\imageedit_1_3378266222.png")
+label = ttk.Label(root, image = logo)
+label.grid(column=2, row=2)
 buton = ttk.Button(root, text="Excel bushings to XML", command = exl2xml_win)
-buton.pack()
+buton.grid(column=2, row=2)
 buton2 = ttk.Button(root, text="XML bushings to Excel", command = xml2exl_win)
-buton2.pack()
+buton2.place(x=88, y=170)
 #filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
 #print(filename)
 root.mainloop()
