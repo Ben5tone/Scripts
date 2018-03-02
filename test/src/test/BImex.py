@@ -143,7 +143,7 @@ class BImex(object):
                 for child3 in child.iter("PARAMETERS"):
                     #print(child3.tag)
                     for child4 in child3:
-                        if child4.tag == "GE_VALUES":
+                        if child4.tag == "K_VALUES":
                             xml_bushings[child2.text] = child4.attrib
                             
         print(xml_bushings)
@@ -155,12 +155,12 @@ class BImex(object):
                     for row_idx2 in range(row_idx, x1_sheet.nrows): # Iterate through columns
                         for key, value in xml_bushings.items():
                             row_idx2 = row_idx2+1
-                            v1 = xml_bushings[key]['ge1']
-                            v2 = xml_bushings[key]['ge2'] 
-                            v3 = xml_bushings[key]['ge3'] 
-                            v4 = xml_bushings[key]['ge4'] 
-                            v5 = xml_bushings[key]['ge5'] 
-                            v6 = xml_bushings[key]['ge6']
+                            v1 = xml_bushings[key]['k1']
+                            v2 = xml_bushings[key]['k2'] 
+                            v3 = xml_bushings[key]['k3'] 
+                            v4 = xml_bushings[key]['k4'] 
+                            v5 = xml_bushings[key]['k5'] 
+                            v6 = xml_bushings[key]['k6']
                             wb.cell(row = row_idx2+1, column = col_idx+1, value = key)
                             print(wb.cell(row = row_idx2+1, column = col_idx+1).value)
                             for col_idx2 in range(col_idx+2,x1_sheet.ncols-1):
@@ -178,6 +178,7 @@ class BImex(object):
                                     wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
     
                         y1_workbook.save(exlfo)
+                        print(exlfo)
                         break
                     messagebox.showinfo("Process", "Done")
                     

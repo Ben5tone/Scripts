@@ -6,6 +6,7 @@ Created on 20/02/2018
 import xlrd
 from tkinter import Toplevel, Entry, Tk, ttk, filedialog, messagebox, Listbox, PhotoImage
 from BImex import BImex
+from tkinter.filedialog import askdirectory
 
 global b
 b = BImex()
@@ -19,11 +20,13 @@ def sheetse():
     sheet_names = x1_workbook.sheet_names()
     lb.insert(0,*sheet_names)
     
+
 def sheetsx():
-    Runnx.config(state='enabled')
-    x1_workbook = xlrd.open_workbook(textx2.get())
-    sheet_names = x1_workbook.sheet_names()
-    lb.insert(0,*sheet_names)
+        Runnx.config(state='enabled')
+        x1_workbook = xlrd.open_workbook(textx2.get())
+        sheet_names = x1_workbook.sheet_names()
+        lb.insert(0,*sheet_names)
+
 
 def xml_check():
     if browser_xmlfo.state() == ('disabled',):
@@ -42,28 +45,40 @@ def exl_check():
         texte3.config(state='disabled')
     
 
-def run(t = None,t2 = None,listb = None, s_num = None):
+def run(t = None,t2 = None,t3 = None,listb = None, s_num = None):
     if messagebox.askokcancel(title = 'File Ouput', message = 'If you want to overwrite the original file with the updated data then press OK.\nOtherwise press CANCEL and select the XML Output File box to create a new file') == True:
         if t == None:
             t = texte.get()
         if t2 == None:
             t2 = texte2.get()
+        if t3 == None:
+            if browser_exlfo.state() == ('disabled',):
+                t3 = t2
+            else:
+                t3 = texte3.get() 
         if listb == None:
             listb = lb.get(lb.curselection()[0])
         if s_num == None:
             s_num = int(lb.curselection()[0])
-    b.exl2xml(t, t2, t,listb,s_num)
+    b.exl2xml(t, t2, t3,listb,s_num)
     
-def run2(t = None,t2 = None,listb = None, s_num = None):
+def run2(t = None,t2 = None,t3 = None,listb = None, s_num = None, file3xr = None):
     if t == None:
         t = textx.get()
     if t2 == None:
         t2 = textx2.get()
+    if t3 == None:
+        if browser_xmlfo.state() == ('disabled',):
+            t3 = t2
+        else:
+            #file3xr = file3x
+            #t3 = file3xr +"/"+textx3.get()+".xlsx"
+            t3 = textx3.get()
     if listb == None:
         listb = lb.get(lb.curselection()[0])
     if s_num == None:
         s_num = int(lb.curselection()[0])
-    b.xml2exl(t, t2, t2,listb,s_num)
+    b.xml2exl(t, t2, t3,listb,s_num)
 
 def browserfx1():
     file1 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("xml files","*.xml"),("all files","*.*")))
@@ -76,8 +91,10 @@ def browserfx2():
     #t2 = text2.get()
     
 def browserfx3():
-    file3 = filedialog.asksaveasfilename(defaultextension='xlsx',filetypes=[("Excel Files","*.xlsx .xlsm")])
-    textx3.insert(0, file3)
+    #global file3x
+    file3 = filedialog.asksaveasfilename(defaultextension='.xlsx',filetypes=[("Excel file","*.xlsx")])
+    textx3.insert(0,file3)
+    #return file3x
     #t2 = text2.get()
     
 def browserfe1():
@@ -91,7 +108,7 @@ def browserfe2():
     #t2 = text2.get()
     
 def browserfe3():
-    file3 = filedialog.asksaveasfilename(defaultextension='xml',filetypes=[("XML file","*.xml")])
+    file3 = filedialog.asksaveasfilename(defaultextension='.xml',filetypes=[("XML file","*.xml")])
     texte3.insert(0, file3)
     #t2 = text2.get()
     
@@ -174,13 +191,12 @@ def xml2exl_win():
     
 root = Tk()
 root.title("BIm3x")
-logo = PhotoImage(file = "C:\\Users\\julio\\Downloads\\imageedit_1_3378266222.png")
-label = ttk.Label(root, image = logo)
-label.grid(column=2, row=2)
+label = ttk.Label(root, text='BIm3x')
+label.pack()
 buton = ttk.Button(root, text="Excel bushings to XML", command = exl2xml_win)
-buton.grid(column=2, row=2)
+buton.pack()
 buton2 = ttk.Button(root, text="XML bushings to Excel", command = xml2exl_win)
-buton2.place(x=88, y=170)
+buton2.pack()
 #filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
 #print(filename)
 root.mainloop()
