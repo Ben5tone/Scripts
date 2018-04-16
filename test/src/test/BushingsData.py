@@ -4,11 +4,11 @@ Created on 20/02/2018
 @author: JCHAV106
 '''
 import xlrd
-from tkinter import messagebox, Toplevel
+from tkinter import messagebox
 from openpyxl import load_workbook
 import xml.etree.ElementTree as ET
 
-class BImex(object):
+class Imex(object):
     
     
     def __init__(self,):
