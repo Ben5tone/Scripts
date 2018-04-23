@@ -3,19 +3,18 @@ Created on 20/02/2018
 
 @author: JCHAV106
 '''
-import xlrd
 from tkinter import Toplevel, Entry, Tk, ttk, filedialog, messagebox, Listbox, PhotoImage
-from BImex import BImex
-from tkinter.filedialog import askdirectory
+from BushingsData import Extract
 
 global b
-b = BImex()
+global lb
+b = Extract()
 global text
 global text2
 #global t
 #global t2
 
-def sheetse():
+'''def sheetse():
     x1_workbook = xlrd.open_workbook(texte2.get())
     sheet_names = x1_workbook.sheet_names()
     lb.insert(0,*sheet_names)
@@ -25,7 +24,7 @@ def sheetsx():
         Runnx.config(state='enabled')
         x1_workbook = xlrd.open_workbook(textx2.get())
         sheet_names = x1_workbook.sheet_names()
-        lb.insert(0,*sheet_names)
+        lb.insert(0,*sheet_names)'''
 
 
 def xml_check():
@@ -45,7 +44,7 @@ def exl_check():
         texte3.config(state='disabled')
     
 
-def run(t = None,t2 = None,t3 = None,listb = None, s_num = None):
+def run(t = None,t2 = None,t3 = None):
     if messagebox.askokcancel(title = 'File Ouput', message = 'If you want to overwrite the original file with the updated data then press OK.\nOtherwise press CANCEL and select the XML Output File box to create a new file') == True:
         if t == None:
             t = texte.get()
@@ -56,39 +55,23 @@ def run(t = None,t2 = None,t3 = None,listb = None, s_num = None):
                 t3 = t2
             else:
                 t3 = texte3.get() 
-        if listb == None:
-            listb = lb.get(lb.curselection()[0])
-        if s_num == None:
-            s_num = int(lb.curselection()[0])
-    b.exl2xml(t, t2, t3,listb,s_num)
+
+    b.exl2xml(t, t2, t3)
     
-def run2(t = None,t2 = None,t3 = None,listb = None, s_num = None, file3xr = None):
+def run2(t = None, t3 = None):
     if t == None:
         t = textx.get()
-    if t2 == None:
-        t2 = textx2.get()
     if t3 == None:
         if browser_xmlfo.state() == ('disabled',):
-            t3 = t2
+            t3 = None
         else:
-            #file3xr = file3x
-            #t3 = file3xr +"/"+textx3.get()+".xlsx"
             t3 = textx3.get()
-    if listb == None:
-        listb = lb.get(lb.curselection()[0])
-    if s_num == None:
-        s_num = int(lb.curselection()[0])
-    b.xml2exl(t, t2, t3,listb,s_num)
+    b.xml2exl(t,t3)
 
 def browserfx1():
     file1 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("xml files","*.xml"),("all files","*.*")))
     textx.insert(0, file1)
     #t = text.get()
-    
-def browserfx2():
-    file2 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("Excel files","*.xlsx .xlsm"),("all files","*.*")))
-    textx2.insert(0, file2)
-    #t2 = text2.get()
     
 def browserfx3():
     #global file3x
@@ -114,9 +97,10 @@ def browserfe3():
     
 def exl2xml_win():
     newin = Toplevel(root)
-    display = ttk.Label(newin, text = "XML File")
+    newin.configure(background = 'white')
+    display = ttk.Label(newin, text = "XML File", background = 'white')
     display.grid(row=1,column=3)
-    display2 = ttk.Label(newin, text = "Excel File")
+    display2 = ttk.Label(newin, text = "Excel File", background = 'white')
     display2.grid(row=2,column=3)
     display2 = ttk.Label(newin)
     display2.grid(row=3,column=3)
@@ -140,59 +124,54 @@ def exl2xml_win():
     global browser_exlfo
     browser_exlfo = ttk.Button(newin, text = "Browser", command = browserfe3, state='disabled')
     browser_exlfo.grid(row=3,column=5)
-    c = ttk.Checkbutton(newin, text = "XML Output\n     File", command = exl_check)
+    style = ttk.Style()
+    style.configure("White.TCheckbutton", background="white")
+    c = ttk.Checkbutton(newin, text = "XML Output\n     File", command = exl_check, style = "White.TCheckbutton")
     c.grid(row=3, column=3)
     global Runne
-    Runne = ttk.Button(newin, text = "Run", command = run,state='disabled')
+    Runne = ttk.Button(newin, text = "Run", command = run,state='enabled')
     Runne.grid(row = 5, column = 5)
-    sheets_b = ttk.Button(newin, text = "Get Sheet Names", command = sheetse)
-    sheets_b.grid(row = 5, column = 4)
-    global lb
-    lb = Listbox(newin)
-    lb.grid(row = 6, column = 4)
-    return browser_exlfo,lb , texte, texte2, texte3, Runne
+    return browser_exlfo, texte, texte2, texte3, Runne
     
 def xml2exl_win():
     newin = Toplevel(root)
-    display = ttk.Label(newin, text = "XML File")
+    newin.configure(background = 'white')
+    display = ttk.Label(newin, text = "XML File", background = 'white')
     display.grid(row=1,column=3)
-    display2 = ttk.Label(newin, text = "Excel File")
-    display2.grid(row=2,column=3)
     global textx
     textx = Entry(newin)
-    global textx2
-    textx2 = Entry(newin)
     global textx3
     textx3 = Entry(newin,state='disabled')
     #text.pack(side=LEFT, fill = X)
     #Grid.columnconfigure(newin,4,weight=2)
     textx.grid(row=1,column=4)
-    textx2.grid(row=2,column=4)
+    #textx2.grid(row=2,column=4)
     textx3.grid(row=3,column=4)
     browser_xml = ttk.Button(newin, text = "Browser", command = browserfx1)
     browser_xml.grid(row=1,column=5)
     #browser.pack(side=RIGHT)
-    browser_exl = ttk.Button(newin, text = "Browser", command = browserfx2)
-    browser_exl.grid(row=2,column=5)
+    #browser_exl = ttk.Button(newin, text = "Browser", command = browserfx2)
+    #browser_exl.grid(row=2,column=5)
     global browser_xmlfo
     browser_xmlfo = ttk.Button(newin, text = "Browser", command = browserfx3, state='disabled')
     browser_xmlfo.grid(row=3,column=5)
-    c = ttk.Checkbutton(newin, text = "   Excel\nOutput File", command = xml_check)
+    style = ttk.Style()
+    style.configure("White.TCheckbutton", background="white")
+    c = ttk.Checkbutton(newin, text = "   Excel\nOutput File", command = xml_check, style = "White.TCheckbutton" )
     c.grid(row=3, column=3)
     global Runnx
-    Runnx = ttk.Button(newin, text = "Run", command = run2, state='disabled')
+    Runnx = ttk.Button(newin, text = "Run", command = run2, state='enabled')
     Runnx.grid(row = 5, column = 5)
-    sheets_b = ttk.Button(newin, text = "Existing Sheets", command = sheetsx)
-    sheets_b.grid(row = 5, column =4)
-    global lb
-    lb = Listbox(newin)
-    lb.grid(row = 6, column = 4)
-    return browser_xmlfo,lb, textx, textx2, textx3, Runnx
+    return browser_xmlfo, textx, textx3, Runnx
     
 root = Tk()
-root.title("BIm3x")
-label = ttk.Label(root, text='BIm3x')
+root.title("Extract Bushing Rates Tool")
+pimage = PhotoImage(file = 'C:\\Users\\JCHAV106\\Pictures\\ford-logo-A8C4E442AE-seeklogo.com.png')
+root.configure(background = 'white')
+label = ttk.Label(root, background = 'white', image = pimage)
 label.pack()
+title_label = ttk.Label(root, text='Extract Bushing Rates Tool', background = 'white', foreground = 'blue', font =("Arial", 14))
+title_label.pack()
 buton = ttk.Button(root, text="Excel bushings to XML", command = exl2xml_win)
 buton.pack()
 buton2 = ttk.Button(root, text="XML bushings to Excel", command = xml2exl_win)

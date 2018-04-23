@@ -4,17 +4,18 @@ Created on 20/02/2018
 @author: JCHAV106
 '''
 import xlrd
-from tkinter import messagebox
+from tkinter import messagebox, Toplevel
 from openpyxl import load_workbook
 import xml.etree.ElementTree as ET
+import os
 
-class Imex(object):
+class Extract(object):
     
     
     def __init__(self,):
         ""
 
-    def exl2xml(self,xmlf,exlf,xmlfo,s_num):
+    def exl2xml(self,xmlf,exlf,xmlfo):
     
         tree = ET.parse(xmlf)
         root = tree.getroot()
@@ -28,7 +29,7 @@ class Imex(object):
         print('Sheet Names',sheet_names)
         
         #Call the first sheet of the book
-        x1_sheet = x1_workbook.sheet_by_index(s_num)
+        x1_sheet = x1_workbook.sheet_by_index(5)
     
         #List variables to put the names of the bushing names contained in the xml and excel file
         xml_bushings = []
@@ -113,73 +114,212 @@ class Imex(object):
                                     tree.write(xmlfo)  
                                     #print(child5.attrib)
     
-    def xml2exl(self,xmlf,exlf,exlfo,current_s,s_num):
+    def xml2exl(self,xmlf,exlfo):
+        
+        dirname = os.path.dirname(__file__)
+        template = os.path.join(dirname,'Extract_bushing_rates_tool.xlsm')
+        #save = os.path.join(dirname,'Extract_bushing_rates_tool.xlsx')
         
         tree = ET.parse(xmlf)
         root = tree.getroot()
     
         #Open the workbook to read in
-        x1_workbook = xlrd.open_workbook(exlf)
+        #x1_workbook = xlrd.open_workbook(exlf)
     
         #Obtain spreadsheet names of the current workbook
-        sheet_names = x1_workbook.sheet_names()
+        #sheet_names = x1_workbook.sheet_names()
 
-        print('Sheet Names',sheet_names)
+        #print('Sheet Names',sheet_names)
         
         #Call the first sheet of the book
-        x1_sheet = x1_workbook.sheet_by_index(s_num)
+        #x1_sheet = x1_workbook.sheet_by_index(5)
        
         #Open the workbook to read in
-        y1_workbook = load_workbook(exlf)
-        wb = y1_workbook[current_s]
+        y1_workbook = load_workbook(template)
+        wb = y1_workbook['CM6']
     
         #List variables to put the names of the bushing names contained in the xml and excel file
         xml_bushings = {}
-    
-        #Iterate over inline.xml file to obtain all the bushing names 
-        for child in root.iter("NVHC_PROPERTY"):
-            for child2 in child.iter("NAME"):
-                #print(child2.text)
-                for child3 in child.iter("PARAMETERS"):
-                    #print(child3.tag)
-                    for child4 in child3:
-                        if child4.tag == "K_VALUES":
-                            xml_bushings[child2.text] = child4.attrib
-                            
-        print(xml_bushings)
-    
-        for row_idx in range(0, x1_sheet.nrows):    # Iterate through rows
-            for col_idx in range(0, x1_sheet.ncols):  # Iterate through columns
-                cell_obj = x1_sheet.cell(row_idx, col_idx).value  # Get cell object by row, col 
-                if cell_obj == "Bushing":
-                    for row_idx2 in range(row_idx, x1_sheet.nrows): # Iterate through columns
-                        for key, value in xml_bushings.items():
-                            row_idx2 = row_idx2+1
-                            v1 = xml_bushings[key]['k1']
-                            v2 = xml_bushings[key]['k2'] 
-                            v3 = xml_bushings[key]['k3'] 
-                            v4 = xml_bushings[key]['k4'] 
-                            v5 = xml_bushings[key]['k5'] 
-                            v6 = xml_bushings[key]['k6']
-                            wb.cell(row = row_idx2+1, column = col_idx+1, value = key)
-                            print(wb.cell(row = row_idx2+1, column = col_idx+1).value)
-                            for col_idx2 in range(col_idx+2,x1_sheet.ncols-1):
-                                if(col_idx2 == 5):
-                                    wb.cell(row = row_idx2+1, column = col_idx2, value = float(v1))
-                                if(col_idx2 == 6):
-                                    wb.cell(row = row_idx2+1, column = col_idx2, value = float(v2))
-                                if(col_idx2 == 7):
-                                    wb.cell(row = row_idx2+1, column = col_idx2, value = float(v3))
-                                if(col_idx2 == 8):
-                                    wb.cell(row = row_idx2+1, column = col_idx2, value = float(v4))
-                                if(col_idx2 == 9):
-                                    wb.cell(row = row_idx2+1, column = col_idx2, value = float(v5))
-                                if(col_idx2 == 10):
-                                    wb.cell(row = row_idx2+1, column = col_idx2, value = float(v6))
-    
-                        y1_workbook.save(exlfo)
-                        print(exlfo)
-                        break
-                    messagebox.showinfo("Process", "Done")
-                    
-                    break
+   
+        save_num = 0
+        dic = {}                         
+        num = 0
+        varn = ""
+        varn2 = []
+        varsbs1 = []
+        varsbs2 = {}
+        bushings_list = []
+        prop = []
+        cont_varn = 0
+        numero = 0
+        bushingsss = {}
+        bushsave = {}
+        for control_group in root:
+            if control_group.tag == "NVHC_CONTROL_GROUP":
+                for subsys in control_group:
+                    if subsys.tag == "NAME":
+                        sub_key = subsys.text
+                        dic[sub_key]= {}
+                        num += 1
+                        if num == 1:
+                            cont = 0
+                            cont_varn = 0
+                            if varn2 == []:
+                                dic[sub_key][""]={}
+                                dic[sub_key][""][""]=bushings_list
+                            else:
+                                for varnames in varn2:
+                                    dic[sub_key][varnames] = {}
+                                    dic[sub_key][varnames] = varsbs2
+                                    varsbs2 = {}
+                        else:
+                            dic[sub_key][""]={}
+                            dic[sub_key][""][""]=bushings_list
+                        
+                        bushings_list = []
+                        varn2 = []
+                    if subsys.tag == "CONTENTS":
+                        for contents in subsys:              
+                            if contents.tag == "NVHC_CONTROL_GROUP":    
+                                for varname in contents:
+                                        if varname.tag == "NAME":  
+                                            varn = varname.text
+                                            varn2.insert(varn2.__len__(),varn)
+                                            if num == 0:
+                                                print("")
+                                            else:
+                                                varsbs1 = []
+                                            varsbs1.insert(varsbs1.__len__(),varsbs2)
+                                            num = 0
+                                        if varname.tag == "CONTENTS":
+                                            for control_group2 in varname:
+                                                if control_group2.tag == "NVHC_CONTROL_GROUP":
+                                                    for varsubs in control_group2:
+                                                        if varsubs.tag == "NAME":
+                                                            print(varsubs.text)
+                                                            varsbs2[varsubs.text]= prop
+                                                            prop = []
+                                                            print(varsbs2)  
+                                                        if varsubs.tag == "CONTENTS":                                                
+                                                            for varsubs2 in varsubs:
+                                                                if varsubs2.tag == "NVHC_CONNECTOR":
+                                                                    for varsubs3 in varsubs2:
+                                                                        if varsubs3.tag == "REPRESENTATION":
+                                                                            for varsubs4 in varsubs3:
+                                                                                for varsubs5 in varsubs4:
+                                                                                    if varsubs5.tag == "PROPERTY":
+                                                                                        prop.insert(prop.__len__(),varsubs5.text)
+                            if contents.tag == "NVHC_PROPERTY":
+                                for bushings in contents:
+                                    if bushings.tag == "NAME":
+                                        bushings_list.insert(0,bushings.text) 
+        print(dic)
+        
+        for key, value in dic.items():
+            numero += 1
+            print(key)
+            wb.cell(row = 3 + numero, column = 1, value = key)
+            for key2, value2 in value.items():
+                numero += 1
+                print(key2)
+                print(value2.items())
+                wb.cell(row = 3 + numero, column = 2, value = key2)
+                for key3, value3 in value2.items():
+                    numero +=1
+                    print("--------------")
+                    print(key3)
+                    print(value3)
+                    wb.cell(row = 3 + numero, column = 3, value = key3)
+                    for key4 in value3:
+                        numero +=1
+                        print(key4)
+                        wb.cell(row = 3 + numero, column = 4, value = key4)
+        
+        if exlfo != None:
+            y1_workbook.save(exlfo)
+        else:
+            save_path = 'Extract_bushing_rates_tool' + '(' + str(save_num) + ')' + '.xlsx'
+            exists = os.path.exists(save_path)
+            while exists == True:
+                save_num += 1
+                save_path = 'Extract_bushing_rates_tool' + '(' + str(save_num) + ')' + '.xlsx'
+                exists = os.path.exists(save_path)
+            save = os.path.join(dirname,save_path)
+            y1_workbook.save(save)
+
+        if exlfo != None:
+            x1_workbook = xlrd.open_workbook(exlfo)
+        else:
+
+            x1_workbook = xlrd.open_workbook(save)
+
+        x1_sheet = x1_workbook.sheet_by_index(5)
+
+        for control_group2 in root:
+            if control_group2.tag == "NVHC_CONTROL_GROUP":
+                for subsys2 in control_group2:
+                    if subsys2.tag == "CONTENTS":
+                        for contents2 in subsys2:  
+                            if contents2.tag == "NVHC_PROPERTY":
+                                for bushings2 in contents2:
+                                    if bushings2.tag == "NAME":
+                                        bushname = bushings2.text 
+                                        bushingsss[bushname] = {}
+                                    if bushings2.tag =="PARAMETERS" :
+                                        for values2 in bushings2:
+                                            'bushsave[values2.tag] = values2.attrib'
+                                            bushingsss[bushname][values2.tag] = {}
+                                            bushingsss[bushname][values2.tag] = values2.attrib
+        print(bushingsss)
+        for b_k, b_val in bushingsss.items():
+            for row_idx in range(0, x1_sheet.nrows):
+                if x1_sheet.cell(row_idx,3).value == b_k:
+                    for col_idx in range(5,x1_sheet.ncols+1):
+                        if col_idx == 5:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['B_VALUES']['b1']))
+                        if col_idx == 6:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['B_VALUES']['b2']))
+                        if col_idx == 7:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['B_VALUES']['b3']))
+                        if col_idx == 8:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['B_VALUES']['b4']))
+                        if col_idx == 9:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['B_VALUES']['b5']))
+                        if col_idx == 10:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['B_VALUES']['b6']))
+                        if col_idx == 11:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge1']))
+                        if col_idx == 12:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge2']))
+                        if col_idx == 13:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge3']))
+                        if col_idx == 14:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge4']))
+                        if col_idx == 15:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge5']))
+                        if col_idx == 16:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge6']))
+                        if col_idx == 17:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['K_VALUES']['k1']))
+                        if col_idx == 18:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['K_VALUES']['k2']))
+                        if col_idx == 19:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['K_VALUES']['k3']))
+                        if col_idx == 20:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['K_VALUES']['k4']))
+                        if col_idx == 21:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['K_VALUES']['k5']))
+                        if col_idx == 22:
+                            wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['K_VALUES']['k6']))
+        if exlfo != None:
+            y1_workbook.save(exlfo)
+        else:
+            
+            save_path = 'Extract_bushing_rates_tool' + '(' + str(save_num) + ')' + '.xlsx'
+            exists = os.path.exists(save_path)
+            while exists == True:
+                save_num += 1
+                save_path = 'Extract_bushing_rates_tool' + '(' + str(save_num) + ')' + '.xlsx'
+                exists = os.path.exists(save_path)
+            save = os.path.join(dirname,save_path)
+            y1_workbook.save(save)
