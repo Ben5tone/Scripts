@@ -8,6 +8,7 @@ from tkinter import messagebox, Toplevel
 from openpyxl import load_workbook
 import xml.etree.ElementTree as ET
 import os
+import sys
 import ctypes.wintypes
 
 CSIDL_PERSONAL = 5       # My Documents
@@ -67,7 +68,7 @@ class Extract(object):
                                                 #print(cell_obj3,cell_obj2, xml_bushings[i], a + 1)
                                                 exl_bushings.insert(exl_bushings.__len__(), cell_obj3)
                                                 cont = cont + 1
-                                                if cont == 6:
+                                                if cont == 18:
                                                     cont = 0
                                                     bushings_dict[str(cell_obj2)] = exl_bushings
                                                     exl_bushings = [] 
@@ -144,10 +145,17 @@ class Extract(object):
                                     #Write the new data to the same xml file or create a new with diferent name  
                                     tree.write(xmlfo)  
                                     #print(child5.attrib)
-    
+        messagebox.showinfo('Process','Done')
     def xml2exl(self,xmlf,exlfo):
         
-        dirname = os.path.dirname(__file__)
+        if getattr(sys, 'frozen', False):
+            # If the application is run as a bundle, the pyInstaller bootloader
+            # extends the sys module by a flag frozen=True and sets the app 
+            # path into variable _MEIPASS'.
+            dirname = os.path.dirname(sys.executable)
+        else:
+            dirname = os.path.dirname(__file__)
+            
         template = os.path.join(dirname,'Extract_bushing_rates_tool.xlsm')
         #save = os.path.join(dirname,'Extract_bushing_rates_tool.xlsx')
         
@@ -344,6 +352,7 @@ class Extract(object):
                             wb.cell(row = row_idx+1, column = col_idx, value = float(bushingsss[b_k]['GE_VALUES']['ge6']))
         if exlfo != None:
             y1_workbook.save(exlfo)
+            messagebox.showinfo('Process','Done')
         else:
             
             #save_path = 'Extract_bushing_rates_tool' + '(' + str(save_num) + ')' + '.xlsx'
@@ -354,3 +363,4 @@ class Extract(object):
                 exists = os.path.exists(buf.value + '/Extract_bushings_rates_tool' + '(' + str(save_num) + ')' + '.xlsx')
             save = os.path.join(dirname,buf.value + '/Extract_bushings_rates_tool' + '(' + str(save_num) + ')' + '.xlsx')
             y1_workbook.save(save)
+            messagebox.showinfo('Process','Done')
