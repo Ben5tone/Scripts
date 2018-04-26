@@ -5,6 +5,7 @@ Created on 20/02/2018
 '''
 from tkinter import Toplevel, Entry, Tk, ttk, Button, filedialog, messagebox, PhotoImage
 from BushingsData import Extract
+import sys, os
 
 global b
 global lb
@@ -32,7 +33,7 @@ def exl_check():
 
 def run(t = None,t2 = None,t3 = None):
     if browser_exlfo['state'] == 'disabled':
-        if messagebox.askokcancel(title = 'File Ouput', message = 'If you want to overwrite the original file with the updated data then press OK.\nOtherwise press CANCEL and select the XML Output File box to create a new file') == True:
+        if messagebox.askokcancel(title = 'File Ouput', message = 'If you want to overwrite the original file with the updated data then press OK.\nOtherwise press CANCEL and select the XML Output File box to create a new file in the desired path.') == True:
             if t == None:
                 t = texte.get()
             if t2 == None:
@@ -57,7 +58,7 @@ def run(t = None,t2 = None,t3 = None):
     
 def run2(t = None, t3 = None):
     if browser_xmlfo['state'] == 'disabled':
-        if messagebox.askokcancel(title = 'File Ouput', message = 'If you want to overwrite the original file with the updated data then press OK.\nOtherwise press CANCEL and select the XML Output File box to create a new file') == True:
+        if messagebox.askokcancel(title = 'File Ouput', message = 'If press OK, the Excel file with the bushings from the XML is gonna be placed in the Documents directory.\nOtherwise press CANCEL and select the Excel Output File box to create a new file in the desired path.') == True:
             if t == None:
                 t = textx.get()
             if t3 == None:
@@ -115,14 +116,14 @@ def exl2xml_win():
     texte.grid(row=1,column=4)
     texte2.grid(row=2,column=4)
     texte3.grid(row=3,column=4)
-    browser_xml = Button(newin, text = "Browser", command = browserfe1, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
+    browser_xml = Button(newin, text = "Browser", command = browserfe1, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     browser_xml.grid(row=1,column=5)
-    browser_exl = Button(newin, text = "Browser", command = browserfe2, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
+    browser_exl = Button(newin, text = "Browser", command = browserfe2, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     browser_exl.grid(row=2,column=5)
     global browser_exlfo
-    browser_exlfo = Button(newin, text = "Browser", command = browserfe3, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
-    browser_exlfo.config(state = 'disabled', foreground = 'gray', bg = '#0066ff')
-    browser_exlfo.config(state = 'normal', foreground = 'white', bg = '#0066ff')
+    browser_exlfo = Button(newin, text = "Browser", command = browserfe3, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
+    browser_exlfo.config(state = 'disabled', foreground = 'gray', bg = '#002F6C')
+    browser_exlfo.config(state = 'normal', foreground = 'white', bg = '#002F6C')
     browser_exlfo['state'] = 'disabled'
     browser_exlfo.grid(row=3,column=5)
     style = ttk.Style()
@@ -130,7 +131,7 @@ def exl2xml_win():
     c = ttk.Checkbutton(newin, text = "XML Output\n     File", command = exl_check, style = "Gray.TCheckbutton")
     c.grid(row=3, column=3)
     global Runne
-    Runne = Button(newin, text = "Run", command = run, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
+    Runne = Button(newin, text = "Run", command = run, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     Runne.grid(row = 5, column = 5)
     return browser_exlfo, texte, texte2, texte3, Runne
     
@@ -145,12 +146,12 @@ def xml2exl_win():
     textx3 = Entry(newin,state='disabled')
     textx.grid(row=1,column=4)
     textx3.grid(row=3,column=4)
-    browser_xml = Button(newin, text = "Browser", command = browserfx1, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
+    browser_xml = Button(newin, text = "Browser", command = browserfx1, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     browser_xml.grid(row=1,column=5)
     global browser_xmlfo
-    browser_xmlfo = Button(newin, text = "Browser", command = browserfx3, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
-    browser_xmlfo.config(state = 'disabled', foreground = 'gray', bg = '#0066ff')
-    browser_xmlfo.config(state = 'normal', foreground = 'white', bg = '#0066ff')
+    browser_xmlfo = Button(newin, text = "Browser", command = browserfx3, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
+    browser_xmlfo.config(state = 'disabled', foreground = 'gray', bg = '#002F6C')
+    browser_xmlfo.config(state = 'normal', foreground = 'white', bg = '#002F6C')
     browser_xmlfo['state'] = 'disabled'
     browser_xmlfo.grid(row=3,column=5)
     style = ttk.Style()
@@ -158,23 +159,34 @@ def xml2exl_win():
     c = ttk.Checkbutton(newin, text = "   Excel\nOutput File", command = xml_check, style = "Gray.TCheckbutton" )
     c.grid(row=3, column=3)
     global Runnx
-    Runnx = Button(newin, text = "Run", command = run2, foreground = 'white', bg = '#0066ff', state = 'active', activebackground = '#0066ff', activeforeground = 'white', font = ('Arial',10,'bold'))
+    Runnx = Button(newin, text = "Run", command = run2, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     Runnx.grid(row = 5, column = 5)
     return browser_xmlfo, textx, textx3, Runnx
     
 root = Tk()
 root.title("Extract Bushing Rates Tool")
-pimage = PhotoImage(file = 'C:\\Users\\JCHAV106\\Pictures\\bushings_tool_logo.png')
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the pyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    #dirname = os.path.dirname(sys.executable)
+    dirname = sys._MEIPASS
+    pimage = PhotoImage(file = os.path.join(dirname,'source\Bushing_Xtool_logo.png'))
+else:
+    dirname = os.path.dirname(__file__)
+    pimage = PhotoImage(file = os.path.join(dirname,'Bushing_Xtool_logo.png'))
+            
+#pimage = PhotoImage(file = os.path.join(dirname,'source\Bushing_Xtool_logo.png'))
 pimage = pimage.subsample(2,2)
 root.configure(background = 'white')
 label = ttk.Label(root, background = 'white', image = pimage)
 label.pack()
 #title_label = ttk.Label(root, text='Extract Bushing Rates Tool', background = 'white', foreground = 'blue', font =("Arial", 14))
 #title_label.pack()
-buton = Button(root, text="Excel bushings to XML", command = exl2xml_win, fg = 'white', bg = '#0066ff', font = ('Arial',12,'bold'))
-buton.place(x=210,y=250)
-buton2 = Button(root, text="XML bushings to Excel", command = xml2exl_win, fg = 'white', bg = '#0066ff', font = ('Arial',12,'bold'))
-buton2.place(x=210,y=300)
+buton = Button(root, text="Excel bushings to XML", command = exl2xml_win, fg = 'white', bg = '#002F6C', font = ('Arial',12,'bold'))
+buton.place(x=200,y=280)
+buton2 = Button(root, text="XML bushings to Excel", command = xml2exl_win, fg = 'white', bg = '#002F6C', font = ('Arial',12,'bold'))
+buton2.place(x=200,y=330)
 root.mainloop()
 
 if __name__ == '__main__':
