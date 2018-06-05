@@ -13,15 +13,6 @@ b = Extract()
 global text
 global text2
 
-
-def xml_check():
-    if browser_xmlfo['state'] == 'disabled':
-        browser_xmlfo.config(state='active')
-        textx3.config(state='normal')
-    else: 
-        browser_xmlfo.config(state='disabled')
-        textx3.config(state='disabled')
-
 def exl_check():
     if browser_exlfo['state'] == 'disabled':
         browser_exlfo.config(state='active')
@@ -56,33 +47,13 @@ def run(t = None,t2 = None,t3 = None):
 
     b.exl2xml(t, t2, t3)
     
-def run2(t = None, t3 = None):
-    if browser_xmlfo['state'] == 'disabled':
-        if messagebox.askokcancel(title = 'File Ouput', message = 'If press OK, the Excel file with the bushings from the XML is gonna be placed in the Documents directory.\nOtherwise press CANCEL and select the Excel Output File box to create a new file in the desired path.') == True:
-            if t == None:
-                t = textx.get()
-            if t3 == None:
-                if browser_xmlfo['state'] == 'disabled':
-                    t3 = None
-                else:
-                    t3 = textx3.get()
-        else:
-            if t == None:
-                t = textx.get()
-            if t3 == None:
-                if browser_xmlfo['state'] == 'disabled':
-                    t3 = None
-                else:
-                    t3 = textx3.get()
-    b.xml2exl(t,t3)
+def run2(t = None):
+    t = textx.get()
+    b.xml2exl(t)
 
 def browserfx1():
     file1 = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("xml files","*.xml"),("all files","*.*")))
     textx.insert(0, file1)
-    
-def browserfx3():
-    file3 = filedialog.asksaveasfilename(defaultextension='.xlsx',filetypes=[("Excel file","*.xlsx")])
-    textx3.insert(0,file3)
 
     
 def browserfe1():
@@ -142,26 +113,13 @@ def xml2exl_win():
     display.grid(row=1,column=3)
     global textx
     textx = Entry(newin)
-    global textx3
-    textx3 = Entry(newin,state='disabled')
     textx.grid(row=1,column=4)
-    textx3.grid(row=3,column=4)
     browser_xml = Button(newin, text = "Browser", command = browserfx1, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     browser_xml.grid(row=1,column=5)
-    global browser_xmlfo
-    browser_xmlfo = Button(newin, text = "Browser", command = browserfx3, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
-    browser_xmlfo.config(state = 'disabled', foreground = 'gray', bg = '#002F6C')
-    browser_xmlfo.config(state = 'normal', foreground = 'white', bg = '#002F6C')
-    browser_xmlfo['state'] = 'disabled'
-    browser_xmlfo.grid(row=3,column=5)
-    style = ttk.Style()
-    style.configure("Gray.TCheckbutton", background="#666666", foreground = 'white', font = ('Arial',10,'bold'))
-    c = ttk.Checkbutton(newin, text = "   Excel\nOutput File", command = xml_check, style = "Gray.TCheckbutton" )
-    c.grid(row=3, column=3)
     global Runnx
     Runnx = Button(newin, text = "Run", command = run2, foreground = 'white', bg = '#002F6C', state = 'active', activebackground = '#002F6C', activeforeground = 'white', font = ('Arial',10,'bold'))
     Runnx.grid(row = 5, column = 5)
-    return browser_xmlfo, textx, textx3, Runnx
+    return textx, Runnx
     
 root = Tk()
 root.title("Extract Bushing Rates Tool")
